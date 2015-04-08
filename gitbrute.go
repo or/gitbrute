@@ -33,7 +33,7 @@ import (
 )
 
 var (
-	prefix  = flag.String("prefix", "", "Desired prefix")
+	prefix  = flag.String("prefix", "df", "Desired prefix")
 	force   = flag.Bool("force", false, "Re-run, even if current hash matches prefix")
 	cpu     = flag.Int("cpus", runtime.NumCPU(), "Number of CPUs to use. Defaults to number of processors.")
 	pattern = flag.String("pattern", "", "Desired pattern")
@@ -51,9 +51,6 @@ var (
 
 func main() {
 	flag.Parse()
-	if *prefix == "" && *pattern == "" {
-		log.Fatalf("Need prefix or pattern")
-	}
 
 	if *prefix != "" {
 		if _, err := strconv.ParseInt(*prefix, 16, 64); err != nil {
@@ -115,7 +112,7 @@ var (
 )
 
 func hashMatches(hash []byte) bool {
-	if *prefix != "" {
+	if *pattern == "" {
 		return bytes.HasPrefix(hash, bytePrefix)
 	}
 
